@@ -1,7 +1,10 @@
 package com.example.ecommerce_backend_miage_final.controller;
 
 import com.example.ecommerce_backend_miage_final.model.PcBureau;
+import com.example.ecommerce_backend_miage_final.model.PcBureau;
 import com.example.ecommerce_backend_miage_final.service.PcBureauService;
+import com.example.ecommerce_backend_miage_final.service.PcBureauService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,39 +16,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/pcBureau")
 public class PcBureauController {
-    private final PcBureauService pcBureauService;
+    @Autowired
+    private PcBureauService service;
 
-    public PcBureauController(PcBureauService pcBureauService) {
-        this.pcBureauService = pcBureauService;
+
+    public PcBureauController(PcBureauService service) {
+        this.service = service;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<PcBureau>> getAllPcBureau(){
-        List<PcBureau> pcBureau = pcBureauService.findAllPcBureau();
-        return new ResponseEntity<>(pcBureau, HttpStatus.OK);
+    @PostMapping("/article")
+    public int addArticle(@RequestBody PcBureau a) {
+        service.saveArticle(a);
+        return 200;
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<PcBureau> getPcBureauById(@PathVariable("id") Long id){
-        PcBureau pcBureau = pcBureauService.findPcBureauById(id);
-        return new ResponseEntity<>(pcBureau, HttpStatus.OK);
+    @GetMapping("/article")
+    public List<PcBureau> listArticle() {
+        return service.getAllArticle();
     }
 
-    @PostMapping(value = "/add", consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PcBureau> addPcBureau(@RequestBody PcBureau pcBureau){
-        PcBureau newPcBureau = pcBureauService.addPcBureau(pcBureau);
-        return new ResponseEntity<>(newPcBureau, HttpStatus.CREATED);
+    @GetMapping("/article/{id}")
+    public PcBureau findArticleByIdArticle(@PathVariable int id) {
+        return service.getArticle(id);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<PcBureau> updatePcBureau(@RequestBody PcBureau pcBureau){
-        PcBureau updatePcBureau = pcBureauService.updatePcBureau(pcBureau);
-        return new ResponseEntity<>(updatePcBureau, HttpStatus.OK);
+    @GetMapping("/article/{article}")
+    public PcBureau findByArticle(@PathVariable String article) {
+        return service.findByArticle(article);
+    } //voir avec guillaume la v2
+
+    @DeleteMapping("/article/{id}")
+    public int deleteArticleByIdArticle(@PathVariable int id) {
+        service.deleteByIdArticle(id);
+        return 200;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<PcBureau> deletePcBureau(@PathVariable("id") Long id){
-        pcBureauService.deletePcBureau(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/article/{id}")
+    public void updateArticle(@RequestBody PcBureau article, @PathVariable int id) {
+        service.updateArticlev2(id, article);
     }
 }

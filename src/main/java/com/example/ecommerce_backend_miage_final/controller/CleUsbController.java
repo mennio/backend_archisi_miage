@@ -2,7 +2,10 @@ package com.example.ecommerce_backend_miage_final.controller;
 
 
 import com.example.ecommerce_backend_miage_final.model.CleUsb;
+import com.example.ecommerce_backend_miage_final.model.CleUsb;
 import com.example.ecommerce_backend_miage_final.service.CleUsbService;
+import com.example.ecommerce_backend_miage_final.service.CleUsbService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,40 +17,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/cleUsb")
 public class CleUsbController {
-    private final CleUsbService cleUSBService;
+    @Autowired
+    private CleUsbService service;
 
-    public CleUsbController(CleUsbService cleUSBService) {
-        this.cleUSBService = cleUSBService;
+
+    public CleUsbController(CleUsbService service) {
+        this.service = service;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<CleUsb>> getAllCleUSB(){
-        List<CleUsb> cleUSB = cleUSBService.findAllCleUSB();
-        return new ResponseEntity<>(cleUSB, HttpStatus.OK);
+    @PostMapping("/article")
+    public int addArticle(@RequestBody CleUsb a) {
+        service.saveArticle(a);
+        return 200;
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<CleUsb> getCleUSBById(@PathVariable("id") Long id){
-        CleUsb cleUSB = cleUSBService.findCleUSBById(id);
-        return new ResponseEntity<>(cleUSB, HttpStatus.OK);
+    @GetMapping("/article")
+    public List<CleUsb> listArticle() {
+        return service.getAllArticle();
     }
 
-    @PostMapping(value = "/add", consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CleUsb> addCleUSB(@RequestBody CleUsb cleUSB){
-        CleUsb newCleUsb = cleUSBService.addCleUSB(cleUSB);
-        return new ResponseEntity<>(newCleUsb, HttpStatus.CREATED);
+    @GetMapping("/article/{id}")
+    public CleUsb findArticleByIdArticle(@PathVariable int id) {
+        return service.getArticle(id);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<CleUsb> updateCleUSB(@RequestBody CleUsb cleUSB){
-        CleUsb updateCleUsb = cleUSBService.updateCleUSB(cleUSB);
-        return new ResponseEntity<>(updateCleUsb, HttpStatus.OK);
+    @GetMapping("/article/{article}")
+    public CleUsb findByArticle(@PathVariable String article) {
+        return service.findByArticle(article);
+    } //voir avec guillaume la v2
+
+    @DeleteMapping("/article/{id}")
+    public int deleteArticleByIdArticle(@PathVariable int id) {
+        service.deleteByIdArticle(id);
+        return 200;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<CleUsb> deleteCleUSB(@PathVariable("id") Long id){
-        cleUSBService.deleteCleUSB(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/article/{id}")
+    public void updateArticle(@RequestBody CleUsb article, @PathVariable int id) {
+        service.updateArticlev2(id, article);
     }
-
 }

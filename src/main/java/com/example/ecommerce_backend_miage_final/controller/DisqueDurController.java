@@ -2,7 +2,10 @@ package com.example.ecommerce_backend_miage_final.controller;
 
 
 import com.example.ecommerce_backend_miage_final.model.DisqueDur;
+import com.example.ecommerce_backend_miage_final.model.DisqueDur;
 import com.example.ecommerce_backend_miage_final.service.DisqueDurService;
+import com.example.ecommerce_backend_miage_final.service.DisqueDurService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,40 +17,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/disquesDur")
 public class DisqueDurController {
-    private final DisqueDurService disqueDurService;
+    @Autowired
+    private DisqueDurService service;
 
-    public DisqueDurController(DisqueDurService disqueDurService) {
-        this.disqueDurService = disqueDurService;
+
+    public DisqueDurController(DisqueDurService service) {
+        this.service = service;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<DisqueDur>> getAllDisquesDur(){
-        List<DisqueDur> disqueDur = disqueDurService.findAllDisquesDur();
-        return new ResponseEntity<>(disqueDur, HttpStatus.OK);
+    @PostMapping("/article")
+    public int addArticle(@RequestBody DisqueDur a) {
+        service.saveArticle(a);
+        return 200;
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<DisqueDur> getDisquesDurById(@PathVariable("id") Long id){
-        DisqueDur disqueDur = disqueDurService.findDisquesDurById(id);
-        return new ResponseEntity<>(disqueDur, HttpStatus.OK);
+    @GetMapping("/article")
+    public List<DisqueDur> listArticle() {
+        return service.getAllArticle();
     }
 
-    @PostMapping(value = "/add", consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<DisqueDur> addDisquesDur(@RequestBody DisqueDur DisqueDur){
-        DisqueDur newDisqueDur = disqueDurService.addDisquesDur(DisqueDur);
-        return new ResponseEntity<>(newDisqueDur, HttpStatus.CREATED);
+    @GetMapping("/article/{id}")
+    public DisqueDur findArticleByIdArticle(@PathVariable int id) {
+        return service.getArticle(id);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<DisqueDur> updateDisquesDur(@RequestBody DisqueDur DisqueDur){
-        DisqueDur updateDisqueDur = disqueDurService.updateDisquesDur(DisqueDur);
-        return new ResponseEntity<>(updateDisqueDur, HttpStatus.OK);
+    @GetMapping("/article/{article}")
+    public DisqueDur findByArticle(@PathVariable String article) {
+        return service.findByArticle(article);
+    } //voir avec guillaume la v2
+
+    @DeleteMapping("/article/{id}")
+    public int deleteArticleByIdArticle(@PathVariable int id) {
+        service.deleteByIdArticle(id);
+        return 200;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<DisqueDur> deleteDisquesDur(@PathVariable("id") Long id){
-        disqueDurService.deleteDisquesDur(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/article/{id}")
+    public void updateArticle(@RequestBody DisqueDur article, @PathVariable int id) {
+        service.updateArticlev2(id, article);
     }
-
 }

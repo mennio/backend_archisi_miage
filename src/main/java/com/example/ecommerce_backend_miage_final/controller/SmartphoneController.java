@@ -1,7 +1,10 @@
 package com.example.ecommerce_backend_miage_final.controller;
 
 import com.example.ecommerce_backend_miage_final.model.Smartphone;
+import com.example.ecommerce_backend_miage_final.model.Smartphone;
 import com.example.ecommerce_backend_miage_final.service.SmartphoneService;
+import com.example.ecommerce_backend_miage_final.service.SmartphoneService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,39 +16,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/smartphone")
 public class SmartphoneController {
-    private final SmartphoneService smartphoneService;
+    @Autowired
+    private SmartphoneService service;
 
-    public SmartphoneController(SmartphoneService smartphoneService) {
-        this.smartphoneService = smartphoneService;
+
+    public SmartphoneController(SmartphoneService service) {
+        this.service = service;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Smartphone>> getAllSmartphones() {
-        List<Smartphone> smartphones = smartphoneService.getAllSmartphones();
-        return new ResponseEntity<>(smartphones, HttpStatus.OK);
+    @PostMapping("/article")
+    public int addArticle(@RequestBody Smartphone a) {
+        service.saveArticle(a);
+        return 200;
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<Smartphone> getSmartphoneById(@PathVariable("id") Long id){
-        Smartphone smartphones = smartphoneService.findSmartphoneById(id);
-        return new ResponseEntity<>(smartphones, HttpStatus.OK);
+    @GetMapping("/article")
+    public List<Smartphone> listArticle() {
+        return service.getAllArticle();
     }
 
-    @PostMapping(value = "/add", consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Smartphone> addSmartphone(@RequestBody Smartphone smartphones){
-        Smartphone newSmartphone = smartphoneService.addSmartphone(smartphones);
-        return new ResponseEntity<>(newSmartphone, HttpStatus.CREATED);
+    @GetMapping("/article/{id}")
+    public Smartphone findArticleByIdArticle(@PathVariable int id) {
+        return service.getArticle(id);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Smartphone> updateSmartphone(@RequestBody Smartphone smartphone){
-        Smartphone updateSmartphone = smartphoneService.updateSmartphone(smartphone);
-        return new ResponseEntity<>(updateSmartphone, HttpStatus.OK);
+    @GetMapping("/article/{article}")
+    public Smartphone findByArticle(@PathVariable String article) {
+        return service.findByArticle(article);
+    } //voir avec guillaume la v2
+
+    @DeleteMapping("/article/{id}")
+    public int deleteArticleByIdArticle(@PathVariable int id) {
+        service.deleteByIdArticle(id);
+        return 200;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Smartphone> deleteSmartphone(@PathVariable("id") Long id){
-        smartphoneService.deleteSmartphone(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/article/{id}")
+    public void updateArticle(@RequestBody Smartphone article, @PathVariable int id) {
+        service.updateArticlev2(id, article);
     }
 }

@@ -7,8 +7,9 @@ import java.io.Serializable;
 public class PcPortable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false,updatable = false)
-    private int id;
+    @Column(name = "id",nullable = false,updatable = false)
+    private Long id;
+
     private String article;
     private String caracteristique;
     private String prix;
@@ -23,11 +24,11 @@ public class PcPortable implements Serializable {
         this.prix = prix;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

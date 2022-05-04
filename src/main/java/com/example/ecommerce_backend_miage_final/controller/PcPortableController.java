@@ -2,51 +2,52 @@ package com.example.ecommerce_backend_miage_final.controller;
 
 import com.example.ecommerce_backend_miage_final.model.PcPortable;
 import com.example.ecommerce_backend_miage_final.service.PcPortableService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/pcPortable")
 public class PcPortableController {
 
-    private final PcPortableService pcPortableService;
+    @Autowired
+    private PcPortableService service;
 
-    public PcPortableController(PcPortableService pcPortableService) {
-        this.pcPortableService = pcPortableService;
+
+    public PcPortableController(PcPortableService service) {
+        this.service = service;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<PcPortable>> getAllPcPortable(){
-        List<PcPortable> pcPortables = pcPortableService.findAllPcPortable();
-        return new ResponseEntity<>(pcPortables, HttpStatus.OK);
+    @PostMapping("/PcPortable")
+    public void addArticle(@RequestBody PcPortable a) {
+        service.saveArticle(a);
+        //return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<PcPortable> getPcPortableById(@PathVariable("id") Long id){
-        PcPortable pcPortables = pcPortableService.findPcPortableById(id);
-        return new ResponseEntity<>(pcPortables, HttpStatus.OK);
+    @GetMapping("/PcPortable")
+    public List<PcPortable> listArticle() {
+        return service.getAllArticle();
     }
 
-    @PostMapping(value = "/add", consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PcPortable> addPcPortable(@RequestBody PcPortable pcPortable){
-        PcPortable newPcPortables = pcPortableService.addPcPortable(pcPortable);
-        return new ResponseEntity<>(newPcPortables, HttpStatus.CREATED);
+    @GetMapping("/PcPortable/{id}")
+    public Optional<PcPortable> findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<PcPortable> updatePcPortable(@RequestBody PcPortable pcPortable){
-        PcPortable updatePcPortables = pcPortableService.updatePcPortable(pcPortable);
-        return new ResponseEntity<>(updatePcPortables, HttpStatus.OK);
+    /*@GetMapping("/PcPortable/{article}")
+    public PcPortable findByArticle(@PathVariable String article) {
+        return service.findByArticle(article);
+    } //voir avec guillaume la v2*/
+
+    @DeleteMapping("/PcPortable")
+    public void deleteArticle(@RequestBody PcPortable article) {
+        service.deleteArticleById(article);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<PcPortable> deletePcPortable(@PathVariable("id") Long id){
-        pcPortableService.deletePcPortable(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/PcPortable")
+    public void updatePcPortable(@RequestBody PcPortable article) {
+        service.updatePcPortable(article);
     }
 }
