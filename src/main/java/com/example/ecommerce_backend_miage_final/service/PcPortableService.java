@@ -51,18 +51,21 @@ public class PcPortableService {
         return null;
     }
 
-    public void deleteArticleById(PcPortable article) {
-        PcPortable existArticle = repository.findById(article.getId()).orElse(null);
+    public void deleteArticleById(Long id) {
+        PcPortable existArticle = repository.findById(id).orElse(null);
         if(existArticle != null){
             repository.deleteById(existArticle.getId());
         }
     }
 
-    public PcPortable updatePcPortable(PcPortable article) {
-        PcPortable existArticle = repository.findById(article.getId()).orElse(null);
+    public void updatePcPortable(PcPortable pc,Long id) {
+        PcPortable existArticle = repository.findById(id).orElse(null);
         if(existArticle != null){
-            return repository.save(article);
+            existArticle.setPrix(pc.getPrix());
+            existArticle.setArticle(pc.getArticle());
+            existArticle.setImage(pc.getImage());
+            existArticle.setCaracteristique(pc.getCaracteristique());
+            repository.save(existArticle);
         }
-        return article;
     }
 }

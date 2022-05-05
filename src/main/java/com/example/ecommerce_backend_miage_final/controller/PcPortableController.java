@@ -41,13 +41,13 @@ public class PcPortableController {
         return service.findByArticle(article);
     } //voir avec guillaume la v2*/
 
-    @DeleteMapping("/PcPortable")
-    public void deleteArticle(@RequestBody PcPortable article) {
-        service.deleteArticleById(article);
+    @DeleteMapping("/PcPortable/{id}")
+    public void deleteArticle(@PathVariable Long id) {
+        service.deleteArticleById(id);
     }
 
-    @PutMapping("/PcPortable")
-    public void updatePcPortable(@RequestBody PcPortable article) {
-        service.updatePcPortable(article);
+    @PutMapping("/PcPortable/{id}")
+    public void updatePcPortable(@RequestBody PcPortable portable, @PathVariable Long id) {
+        service.updatePcPortable(portable,id);
     }
 }
